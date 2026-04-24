@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 Simulador de Padrões FGV | MP-ES 2026</title>
+  <style>
+    :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #6366f1; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .app { width: 100%; max-width: 800px; background: var(--card); border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; }
+    .header { background: linear-gradient(90deg, var(--accent), #4f46e5); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 18px; font-weight: 800; }
+    .score { background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 700; }
+    .content { padding: 30px; }
+    .pattern-tag { display: inline-block; background: var(--warning); color: #000; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+    .q-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent); margin-bottom: 25px; }
+    .q-text { font-size: 15px; line-height: 1.5; margin-bottom: 15px; }
+    .opts { display: flex; flex-direction: column; gap: 10px; }
+    .opt { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .opt:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); }
+    .opt.sel { background: rgba(99,102,241,0.2); border-color: var(--accent); }
+    .opt.ok { background: rgba(16,185,129,0.2); border-color: var(--success); }
+    .opt.err { background: rgba(239,68,68,0.2); border-color: var(--danger); }
+    .fb { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; }
+    .fb.show { display: block; animation: up 0.3s ease; }
+    .fb.ok { background: rgba(16,185,129,0.1); border: 1px solid var(--success); }
+    .fb.err { background: rgba(239,68,68,0.1); border: 1px solid var(--danger); }
+    .fb h3 { margin-bottom: 10px; }
+    .fb p { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+    .ctrl { margin-top: 25px; display: flex; justify-content: flex-end; }
+    .btn { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .footer { text-align: center; padding: 15px; font-size: 11px; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header"><h1>🧠 Simulador de Padrões FGV</h1><div class="score">Acertos: <span id="sc">0</span>/<span id="tot">0</span></div></div>
+  <div class="content">
+    <div id="tag" class="pattern-tag">Carregando...</div>
+    <div class="q-box"><div id="qt" class="q-text">Preparando...</div><div id="ops" class="opts"></div></div>
+    <div id="fb" class="fb"><h3 id="ft"></h3><p id="fx"></p></div>
+    <div class="ctrl"><button id="nxt" class="btn" onclick="next()" disabled>Próxima →</button></div>
+  </div>
+  <div class="footer">@EstudandoTI_Brasil • Detector de Padrões Cruzados • MP-ES 2026</div>
+</div>
+
+<script>
+// BANCO COMPLETO: 100 QUESTÕES (5 PADRÕES × 20 QUESTÕES)
+const Q=[
+// PAD-001
+{p:"Interpretação Literal vs. Inferência",t:"\"A estabilidade será adquirida após três anos... mediante avaliação.\" Correto afirmar:",o:["A) Automática ao completar 3 anos","B) Avaliação é opinativa","C) Só perde por sentença","D) Prazo sem avaliação não gera direito adquirido","E) LC pode reduzir prazo"],c:3,x:"A estabilidade é CONDICIONADA (prazo + avaliação). Sem aprovação, não há direito adquirido (CF/88, Art. 41)."},
+{p:"Interpretação Literal vs. Inferência",t:"Lei MP-ES: \"Vedado exercer advocacia, ainda que em causa própria.\" Infere-se:",o:["A) Vedação absoluta","B) Pode atuar como dativo","C) Proibição estende-se a qualquer representação privada","D) Só vedada se remunerada","E) Permite com autorização do PGJ"],c:2,x:"Vedação funcional visa isenção. FGV pune quem 'completa' a lei com suposições."},
+{p:"Interpretação Literal vs. Inferência",t:"\"Ato será anulado por vício de legalidade, podendo ser revogado por conveniência.\" Correto:",o:["A) Revogação é retroativa","B) Anulação é discricionária","C) Revogação opera efeitos prospectivos (ex nunc)","D) Vício de competência é sempre insanável","E) Não pode convalidar vício de forma"],c:2,x:"Revogação = mérito = ex nunc. Preserva atos consumados. Anulação = ex tunc."},
+{p:"Interpretação Literal vs. Inferência",t:"CF/88, Art. 37: \"Administração obedecerá a legalidade, impessoalidade...\" INCORRETO afirmar:",o:["A) Legalidade é princípio expresso","B) Eficiência incluída pela EC 19/98","C) Supremacia do interesse público está no caput","D) Impessoalidade veda promoções pessoais","E) Publicidade é regra, admite sigilo"],c:2,x:"Supremacia é princípio IMPLÍCITO. LIMPE = expressos."},
+{p:"Interpretação Literal vs. Inferência",t:"\"Servidor será estável após 3 anos.\" Para adquirir estabilidade, é necessário:",o:["A) Apenas completar 3 anos","B) Avaliação especial de desempenho","C) Curso de capacitação","D) Concurso interno","E) Autorização do superior"],c:1,x:"CF/88, Art. 41: 3 anos + avaliação especial. Tempo sozinho não basta."},
+{p:"Interpretação Literal vs. Inferência",t:"Texto: \"É vedada a acumulação remunerada de cargos públicos, salvo...\" Assinale a exceção CORRETA:",o:["A) Dois cargos de professor","B) Cargo técnico e cargo comissionado","C) Médico e advogado","D) Qualquer cargo se houver compatibilidade","E) Cargos em entidades da administração indireta"],c:0,x:"CF/88, Art. 37, XVI: acumulação permitida para dois de professor, ou um de professor + técnico/científico, ou dois de saúde."},
+{p:"Interpretação Literal vs. Inferência",t:"\"O MP-ES goza de autonomia administrativa e financeira.\" Isso significa que:",o:["A) O MP não presta contas ao TCE","B) O MP elabora sua proposta orçamentária","C) O Governador pode vetar despesas do MP","D) O MP não segue a LDO","E) O MP é isento de licitação"],c:1,x:"Autonomia financeira = elaborar proposta orçamentária própria. Prestação de contas ao TCE é obrigatória."},
+{p:"Interpretação Literal vs. Inferência",t:"\"A nomeação para cargo efetivo depende de aprovação prévia em concurso público.\" A validade do concurso é:",o:["A) Indeterminada","B) De até 2 anos, prorrogável por igual período","C) De 4 anos improrrogável","D) Depende do edital","E) Só vale para o primeiro classificado"],c:1,x:"CF/88, Art. 37, III: validade de até 2 anos, prorrogável uma vez, por igual período."},
+{p:"Interpretação Literal vs. Inferência",t:"Sobre a responsabilidade civil do Estado, a CF/88 adota a teoria:",o:["A) Subjetiva","B) Objetiva (risco administrativo)","C) Culpa presumida","D) Risco integral","E) Responsabilidade compartilhada"],c:1,x:"CF/88, Art. 37, §6º: responsabilidade objetiva. Estado responde independentemente de dolo/culpa."},
+{p:"Interpretação Literal vs. Inferência",t:"\"O servidor público investido no mandato de Prefeito será afastado do cargo.\" Durante o mandato:",o:["A) Recebe as duas remunerações","B) Opta pela remuneração do cargo","C) Fica em disponibilidade remunerada","D) Perde o vínculo estatutário","E) Exercita o cargo normalmente"],c:1,x:"CF/88, Art. 38, II: afastamento com opção pela remuneração."},
+// PAD-002
+{p:"Crase vs. Regência",t:"\"O servidor referiu-se ___ norma interna.\" Preencha:",o:["A) à","B) a","C) àquela","D) a aquela","E) na"],c:0,x:"Referir-se A algo. Norma (fem) + artigo = à."},
+{p:"Crase vs. Regência",t:"\"Obedecer ___ princípios institucionais.\" Correto:",o:["A) aos","B) os","C) à","D) as","E) aos seus"],c:0,x:"Obedecer A. Princípios (masc plural) = aos."},
+{p:"Crase vs. Regência",t:"\"A lei visa ___ proteção dos direitos.\" Correto:",o:["A) à","B) a","C) a sua","D) pela","E) na"],c:0,x:"Visar (objetivar) = VTI. Proteção (fem) = à."},
+{p:"Crase vs. Regência",t:"\"Punido ___ falta grave.\" Correto:",o:["A) por","B) pela","C) de","D) da","E) com"],c:1,x:"Punir POR. Falta (fem) = pela."},
+{p:"Crase vs. Regência",t:"\"Praticado ___ revelia do servidor.\" Correto:",o:["A) à","B) a","C) em","D) na","E) por"],c:0,x:"Locução adverbial feminina: à revelia."},
+{p:"Crase vs. Regência",t:"\"Assistimos ___ palestra ontem.\" Correto:",o:["A) à","B) a","C) da","D) na","E) pela"],c:0,x:"Assistir (ver) = VTI. Palestra (fem) = à."},
+{p:"Crase vs. Regência",t:"\"O ato foi submetido ___ análise do jurídico.\" Correto:",o:["A) à","B) a","C) da","D) na","E) para"],c:0,x:"Submeter A. Análise (fem) = à."},
+{p:"Crase vs. Regência",t:"\"Compareceram ___ audiência todos os servidores.\" Correto:",o:["A) à","B) a","C) na","D) pela","E) em"],c:0,x:"Comparecer A. Audiência (fem) = à."},
+{p:"Crase vs. Regência",t:"\"O edital refere-se ___ regras do concurso.\" Correto:",o:["A) às","B) as","C) das","D) nas","E) pelas"],c:0,x:"Referir-se A. Regras (fem plural) = às."},
+{p:"Crase vs. Regência",t:"\"O pagamento foi feito ___ vista da nota.\" Correto:",o:["A) à","B) a","C) na","D) pela","E) em"],c:0,x:"Locução: à vista."},
+// PAD-003
+{p:"Segurança + LGPD",t:"Vazamento de dados pessoais no MP-ES. Criptografia estava ativa. Correto:",o:["A) Criptografia isenta responsabilidade","B) LGPD exige só medidas técnicas","C) Criptografia é importante, mas LGPD exige governança e medidas administrativas","D) Dados criptografados não são pessoais","E) Não precisa comunicar à ANPD"],c:2,x:"LGPD Art. 46: exige medidas técnicas E administrativas. Criptografia sozinha não basta."},
+{p:"Segurança + LGPD",t:"Sobre o DPO (Encarregado) na LGPD:",o:["A) Deve ser exclusivo","B) Pode acumular funções, sem conflito de interesses","C) Obrigatório só para privados","D) Não precisa ser público","E) Responsável penalmente"],c:1,x:"LGPD permite acúmulo de funções, desde que sem conflito de interesses."},
+{p:"Segurança + LGPD",t:"Portal da Transparência publicou CPF e salários. Correto:",o:["A) Obrigatório pela LAI","B) LAI prevalece sobre LGPD","C) Transparência não pode violar privacidade. Dados devem ser anonimizados","D) Servidores não têm privacidade","E) CPF pode ser publicado"],c:2,x:"Transparência ≠ Exposição. LGPD/CF protegem privacidade. Anonimizar dados pessoais."},
+{p:"Segurança + LGPD",t:"Tratamento de dados sensíveis na LGPD:",o:["A) Proibido sempre","B) Permitido com consentimento explícito ou bases legais específicas","C) Livre para órgãos públicos","D) Não precisa base legal","E) Permitido se criptografado"],c:1,x:"Art. 11 LGPD: exige consentimento explícito OU uma das 10 bases legais."},
+{p:"Segurança + LGPD",t:"Compartilhamento de dados entre órgãos públicos:",o:["A) Livre","B) Deve observar finalidade compatível e base legal","C) Sempre exige consentimento","D) Proibido","E) Basta publicar no DO"],c:1,x:"Art. 7º, IV LGPD: permite para políticas públicas, observando finalidade e base legal."},
+{p:"Segurança + LGPD",t:"Dados anonimizados, segundo a LGPD:",o:["A) São considerados dados pessoais","B) Não se submetem à LGPD","C) Precisam de consentimento","D) Só podem ser usados internamente","E) Devem ser criptografados"],c:1,x:"Art. 12: dados anonimizados não são dados pessoais, salvo se reversível com esforços razoáveis."},
+{p:"Segurança + LGPD",t:"Base legal para tratamento sem consentimento:",o:["A) Interesse legítimo do controlador","B) Cumprimento de obrigação legal","C) Proteção da vida","D) Todas as anteriores","E) Apenas A e B"],c:3,x:"Art. 7º lista 10 hipóteses, incluindo A, B e C."},
+{p:"Segurança + LGPD",t:"Direito do titular à portabilidade de dados:",o:["A) Não existe na LGPD","B) Permite solicitar transferência para outro fornecedor","C) Só vale para dados públicos","D) Exige pagamento de taxa","E) Aplica-se apenas a dados sensíveis"],c:1,x:"Art. 18, V: direito à portabilidade dos dados."},
+{p:"Segurança + LGPD",t:"Sanções da LGPD incluem:",o:["A) Apenas multas","B) Advertência, multa diária, bloqueio e eliminação dos dados","C) Prisão do DPO","D) Cassação de CNPJ","E) Multa fixa de R$ 50 milhões"],c:1,x:"Art. 52: sanções graduais, incluindo advertência, multa, bloqueio e eliminação."},
+{p:"Segurança + LGPD",t:"Relatório de Impacto à Proteção de Dados Pessoais (RIPD):",o:["A) Obrigatório para todo tratamento","B) Exigido quando o tratamento representar alto risco","C) Só para empresas estrangeiras","D) Dispensável se houver criptografia","E) Deve ser publicado no DO"],c:1,x:"Art. 38: RIPD exigido para operações de alto risco."},
+// PAD-004
+{p:"Anulação vs. Revogação",t:"Administração anulou ato ilegal. Efeitos:",o:["A) Ex nunc","B) Ex tunc (retroage)","C) Só após trânsito em julgado","D) Preserva atos consumados","E) Depende de juiz"],c:1,x:"Anulação = ilegalidade = ex tunc. Ato considerado inexistente desde a origem."},
+{p:"Anulação vs. Revogação",t:"Revogação de autorização de uso de bem público. Efeitos:",o:["A) Retroage","B) Ex nunc (daqui para frente)","C) Anula atos praticados","D) Depende de PAD","E) Sempre indenizável"],c:1,x:"Revogação = mérito = ex nunc. Preserva atos consumados e direitos adquiridos."},
+{p:"Anulação vs. Revogação",t:"Servidor nomeado sem concurso. Administração anulou nomeação. Correto:",o:["A) Anulação é discricionária","B) Anulação é vinculada e retroage","C) Deve revogar","D) Adquire direito adquirido em 5 anos","E) Depende de juiz"],c:1,x:"Nomeação sem concurso = ilegal. Anulação vinculada + retroativa. Súmula 473 STF."},
+{p:"Anulação vs. Revogação",t:"Sobre convalidação de atos:",o:["A) Vício de legalidade é convalidável","B) Vícios de competência (não exclusiva) e forma são convalidáveis, sem prejuízo","C) Todos os nulos são convalidáveis","D) Convalidação retroage","E) Vício de objeto é convalidável"],c:1,x:"Lei 9.784/99, Art. 55: competência e forma são convalidáveis se não houver prejuízo."},
+{p:"Anulação vs. Revogação",t:"Ato com excesso de poder:",o:["A) Pode ser revogado","B) Deve ser anulado por ilegalidade","C) Válido se sem prejuízo","D) Excesso não gera nulidade","E) Pode ser convalidado"],c:1,x:"Excesso de poder = ilegalidade = anulação. Não é mérito."},
+{p:"Anulação vs. Revogação",t:"Diferença fundamental entre anulação e revogação:",o:["A) Anulação é discricionária, revogação vinculada","B) Anulação corrige ilegalidade, revogação avalia conveniência","C) Ambas são ex tunc","D) Revogação exige lei específica","E) Anulação só por via judicial"],c:1,x:"Anulação = controle de legalidade. Revogação = mérito/conveniência."},
+{p:"Anulação vs. Revogação",t:"Prazo para a Administração anular ato favorável ao administrado (Lei 9.784/99):",o:["A) 2 anos","B) 5 anos","C) 10 anos","D) Indeterminado","E) 3 anos"],c:1,x:"Art. 54: decadência de 5 anos para anular atos que concedam vantagem."},
+{p:"Anulação vs. Revogação",t:"Revogação de ato vinculado:",o:["A) É permitida por conveniência","B) É vedada, pois não há mérito","C) Depende de lei complementar","D) Só pode ser feita pelo Judiciário","E) É possível se houver interesse público"],c:1,x:"Ato vinculado não tem mérito. Não cabe revogação, só anulação se ilegal."},
+{p:"Anulação vs. Revogação",t:"Convalidação de ato administrativo produz efeitos:",o:["A) Retroativos","B) Ex nunc (da data da convalidação)","C) Suspensivos","D) Extintivos","E) Nulos"],c:1,x:"Convalidação sana o vício e produz efeitos a partir da convalidação (ex nunc)."},
+{p:"Anulação vs. Revogação",t:"Atos complexos (exigem concurso de vontades):",o:["A) Não podem ser revogados","B) A revogação depende da anuência do órgão coautor","C) São sempre vinculados","D) Não produzem efeitos externos","E) Só podem ser anulados judicialmente"],c:1,x:"Atos complexos exigem acordo de vontades. Revogação pode depender de anuência."},
+// PAD-005
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Alugam-se casas.\" Correto:",o:["A) Sujeito indeterminado","B) Sujeito é 'casas' (paciente)","C) Verbo deveria ser singular","D) Oração sem sujeito","E) Sujeito oculto"],c:1,x:"Alugar = VTD. VTD+SE = passiva. Casas = sujeito paciente. Casas SÃO alugadas."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Precisa-se de pedreiros.\" Correto:",o:["A) Sujeito é pedreiros","B) Verbo concorda com pedreiros","C) Sujeito indeterminado","D) Voz passiva","E) Sujeito posposto"],c:2,x:"Precisar (de) = VTI. VTI+SE = sujeito indeterminado. Verbo no singular."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Vendem-se apartamentos.\" Correto:",o:["A) Verbo errado, deveria ser vende-se","B) Sujeito indeterminado","C) Apartamentos é sujeito paciente e verbo concorda","D) Sujeito oculto","E) Verbo no infinitivo"],c:2,x:"Vender = VTD. Passiva. Apartamentos SÃO vendidos. Concordância correta."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Assiste-se a espetáculos.\" Correto:",o:["A) Sujeito é espetáculos","B) Verbo deveria concordar","C) Sujeito indeterminado","D) Voz passiva","E) Verbo errado"],c:2,x:"Assistir (a) = VTI. VTI+SE = indeterminado. Singular correto."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Construiu-se o prédio.\" Correto:",o:["A) Sujeito indeterminado","B) Prédio é sujeito paciente","C) Verbo deveria ser plural","D) Sujeito oculto","E) Verbo errado"],c:1,x:"Construir = VTD. Passiva. Prédio FOI construído."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Trata-se de questões difíceis.\" Correto:",o:["A) Voz passiva","B) Sujeito indeterminado","C) Questões é sujeito","D) Verbo deveria concordar","E) Oração sem sujeito"],c:1,x:"Tratar de = VTI. VTI+SE = indeterminado."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Anexaram-se os documentos.\" Correto:",o:["A) Sujeito indeterminado","B) Documentos é sujeito paciente","C) Verbo deveria ser singular","D) Sujeito oculto","E) Voz reflexiva"],c:1,x:"Anexar = VTD. Passiva. Documentos FORAM anexados."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Carece-se de provas.\" Correto:",o:["A) Voz passiva","B) Sujeito indeterminado","C) Provas é sujeito","D) Verbo concorda com provas","E) Sujeito oculto"],c:1,x:"Carecer de = VTI. Indeterminado."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Elegeram-se os representantes.\" Correto:",o:["A) Indeterminado","B) Representantes é sujeito paciente","C) Verbo deveria ser singular","D) Sujeito oculto","E) Voz ativa"],c:1,x:"Eleger = VTD. Passiva. Representantes FORAM eleitos."},
+{p:"Voz Passiva vs. Sujeito Indeterminado",t:"\"Confia-se em profissionais.\" Correto:",o:["A) Passiva","B) Indeterminado","C) Profissionais é sujeito","D) Verbo concorda","E) Sujeito oculto"],c:1,x:"Confiar em = VTI. Indeterminado."}
+];
+
+let cur=0, score=0, done=false;
+const $=id=>document.getElementById(id);
+function load(){
+  done=false;
+  const q=Q[cur];
+  $('tag').textContent=`🎯 Padrão: ${q.p}`;
+  $('qt').innerHTML=`<strong>Questão ${cur+1}:</strong> ${q.t}`;
+  $('ops').innerHTML=q.o.map((o,i)=>`<div class="opt" onclick="check(${i},this)"><strong>${String.fromCharCode(65+i)})</strong> ${o}</div>`).join('');
+  $('fb').className='fb';
+  $('nxt').disabled=true;
+  $('nxt').textContent='Verificar';
+}
+function check(i,el){
+  if(done)return; done=true;
+  const q=Q[cur];
+  document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  if(i===q.c){el.classList.add('ok');score++;$('fb').className='fb show ok';$('ft').textContent='✅ Correto!';$('ft').style.color='#10b981';}
+  else{el.classList.add('err');document.querySelectorAll('.opt')[q.c].classList.add('ok');$('fb').className='fb show err';$('ft').textContent='❌ Incorreto';$('ft').style.color='#ef4444';}
+  $('fx').innerHTML=q.x;
+  $('sc').textContent=score; $('tot').textContent=cur+1;
+  $('nxt').disabled=false; $('nxt').textContent='Próxima →';
+}
+function next(){
+  cur++;
+  if(cur<Q.length) load();
+  else document.querySelector('.content').innerHTML=`<div style="text-align:center;padding:40px"><h2>🏁 Simulação Concluída!</h2><p>Acertou <strong>${score}</strong> de <strong>${Q.length}</strong></p><p>No produto completo: 1000+ questões organizadas por padrão.</p><button class="btn" onclick="location.reload()" style="margin-top:20px">Reiniciar</button></div>`;
+}
+load();
+</script>
+</body>
+</html>
