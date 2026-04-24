@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obrigado! 🎉 | Estudando T.I.</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #333; min-height: 100vh; padding: 40px 20px; display: flex; align-items: center; justify-content: center; }
+    .container { max-width: 700px; width: 100%; }
+    .box { background: white; padding: 50px 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center; animation: slideUp 0.5s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .icon { font-size: 80px; margin-bottom: 20px; animation: bounce 1s ease; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    h1 { color: #10b981; font-size: 32px; margin-bottom: 15px; font-weight: 800; }
+    .subtitle { color: #64748b; font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
+    .checklist { background: #f1f5f9; padding: 25px; border-radius: 12px; margin: 30px 0; text-align: left; }
+    .checklist h3 { color: #0f172a; margin-bottom: 15px; font-size: 20px; }
+    .checklist ul { list-style: none; }
+    .checklist li { padding: 10px 0; color: #475569; display: flex; align-items: center; font-size: 15px; }
+    .checklist li:before { content: "✅"; margin-right: 10px; font-size: 18px; }
+    .section { margin: 35px 0; padding: 30px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; border-left: 5px solid #6366f1; }
+    .section h3 { color: #0f172a; font-size: 22px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .section p { color: #475569; margin-bottom: 20px; line-height: 1.6; font-size: 15px; }
+    .btn { display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 18px 35px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 16px; margin: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); border: none; cursor: pointer; }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+    .btn-secondary { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    .btn-secondary:hover { box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 25px 0; text-align: left; }
+    .feature { background: white; padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #475569; }
+    .feature-icon { font-size: 24px; }
+    .urgency { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 5px solid #f59e0b; }
+    .urgency p { color: #92400e; font-weight: 600; margin: 0; font-size: 14px; }
+    .guarantee { margin-top: 30px; padding: 20px; background: #ecfdf5; border-radius: 10px; border-left: 5px solid #10b981; }
+    .guarantee p { color: #065f46; margin: 0; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .footer { margin-top: 40px; color: #94a3b8; font-size: 13px; }
+    .footer a { color: #6366f1; text-decoration: none; }
+    @media (max-width: 600px) { .box { padding: 35px 25px; } h1 { font-size: 26px; } .btn { display: block; margin: 10px 0; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      <div class="icon">🎉</div>
+      <h1>Obrigado pelo Download!</h1>
+      <p class="subtitle">Seu e-book <strong>"100 Questões Comentadas de Matemática e RLM"</strong> está a caminho do seu email!</p>
+      
+      <div class="checklist">
+        <h3>📦 O que você vai receber:</h3>
+        <ul>
+          <li>E-book com 100 questões da FGV comentadas</li>
+          <li>Resoluções passo a passo</li>
+          <li>Checklist de Fórmulas Essenciais (Bônus)</li>
+          <li>Cronograma de Estudos de 30 Dias (Bônus)</li>
+          <li>Emails com dicas exclusivas toda semana</li>
+        </ul>
+      </div>
+      
+      <div class="urgency">
+        <p>⚠️ <strong>Importante:</strong> Verifique sua caixa de entrada e spam. Se não receber em 5 minutos, me avise!</p>
+      </div>
+      
+      <!-- SEÇÃO 1: Simulador Gratuito -->
+      <div class="section">
+        <h3>🚀 Enquanto o e-book chega...</h3>
+        <p>Conheça nosso <strong>Simulador Interativo de Padrões FGV</strong>! Treine gratuitamente com questões organizadas por padrão de erro.</p>
+        <div class="features">
+          <div class="feature"><span class="feature-icon">🎯</span><span>100+ questões FGV</span></div>
+          <div class="feature"><span class="feature-icon">💡</span><span>Feedback imediato</span></div>
+          <div class="feature"><span class="feature-icon">📊</span><span>Estatísticas de desempenho</span></div>
+          <div class="feature"><span class="feature-icon">🔄</span><span>100% gratuito</span></div>
+        </div>
+        <a href="https://maureliosiqueira.github.io/simulador-mpes/" class="btn" target="_blank">🧠 ACESSAR SIMULADOR AGORA</a>
+      </div>
+      
+      <!-- SEÇÃO 2: Produto Pago (Upsell) -->
+      <div class="section" style="border-left-color: #6366f1; background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);">
+        <h3 style="color: #6366f1;">📚 Quer Acelerar sua Aprovação?</h3>
+        <p>Conheça o <strong>Detector de Padrões Cruzados: MP-ES 2026</strong> — o método completo para dominar a FGV de vez!</p>
+        <div class="features">
+          <div class="feature"><span class="feature-icon">📘</span><span>Manual Tático Denso (PDF)</span></div>
+          <div class="feature"><span class="feature-icon">💻</span><span>Simulador Interativo Vitalício</span></div>
+          <div class="feature"><span class="feature-icon">📦</span><span>1000+ Questões Comentadas</span></div>
+          <div class="feature"><span class="feature-icon">🎁</span><span>Atualizações Gratuitas</span></div>
+          <div class="feature"><span class="feature-icon">💬</span><span>Comunidade Exclusiva</span></div>
+          <div class="feature"><span class="feature-icon">✅</span><span>Garantia de 7 Dias</span></div>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <p style="color: #64748b; margin-bottom: 10px; font-size: 14px;">De <s style="color: #94a3b8;">R$ 147,00</s> por apenas:</p>
+          <p style="color: #10b981; font-size: 42px; font-weight: 800; margin: 10px 0;">R$ 97,00</p>
+          <p style="color: #64748b; font-size: 13px;">ou 12x de R$ 9,70</p>
+        </div>
+        
+        <!-- ✅ LINK DE CHECKOUT ATUALIZADO AQUI -->
+        <a href="https://go.hotmart.com/Y105533343L" class="btn btn-secondary" target="_blank">🔥 GARANTIR MINHA VAGA AGORA</a>
+        
+        <div class="guarantee">
+          <p>🔒 <strong>Garantia Incondicional de 7 Dias:</strong> Se não gostar, devolvemos 100% do seu dinheiro. Sem perguntas!</p>
+        </div>
+      </div>
+      
+      <!-- Próximos Passos -->
+      <div style="margin-top: 35px; padding: 25px; background: #f8fafc; border-radius: 10px;">
+        <h3 style="color: #0f172a; margin-bottom: 15px; font-size: 18px;">📋 Próximos Passos:</h3>
+        <ol style="text-align: left; color: #475569; padding-left: 20px; line-height: 2;">
+          <li>Verifique seu email (e o spam!)</li>
+          <li>Baixe o e-book e comece a estudar</li>
+          <li>Teste o simulador interativo</li>
+          <li>Considere o Detector de Padrões para ir além</li>
+        </ol>
+      </div>
+      
+      <!-- Footer -->
+      <div class="footer">
+        <p>© 2026 Estudando T.I. • @EstudandoTI_Brasil</p>
+        <p style="margin-top: 10px;">Dúvidas? <a href="mailto:seu-email@dominio.com">Entre em contato</a></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    console.log('Conversão de captura registrada!');
+  </script>
+</body>
+</html>
